@@ -20,22 +20,80 @@ const chats = ref<ChatMessage[]>([
   { id: '1', role: 'assistant', content: 'Hello! How can I help you today?' },
 ])
 
-interface GalleryItem {
+interface BusinessRecommendation {
   id: string
-  image: string
-  title: string
-  description: string
-  address: string
-  coordinates: [number, number] // [lat, lng]
+  name: string
+  address?: string | null
+  phone_number?: string | null
+  email?: string | null
+  website?: string | null
+  review_rate?: string | null
+  number_of_reviews?: string | null
+  description?: string | null
+  coordinates?: [number, number] | null // [lat, lng]
 }
 
-const galleryItems: GalleryItem[] = [
-  { id: 'b1', image: 'https://picsum.photos/seed/biz1/640/360', title: 'Acme Coffee', description: 'Small-batch roastery with a cozy storefront.', address: '123 Main St, Seattle, WA 98101', coordinates: [47.6062, -122.3321] },
-  { id: 'b2', image: 'https://picsum.photos/seed/biz2/640/360', title: 'Nova Fitness', description: 'Boutique gym focusing on functional training.', address: '456 Oak Ave, Portland, OR 97201', coordinates: [45.5152, -122.6784] },
-  { id: 'b3', image: 'https://picsum.photos/seed/biz3/640/360', title: 'Petal & Stem', description: 'Modern floral studio for events and weddings.', address: '789 Pine St, San Francisco, CA 94102', coordinates: [37.7749, -122.4194] },
-  { id: 'b4', image: 'https://picsum.photos/seed/biz4/640/360', title: 'Green Spoon', description: 'Plant-forward bistro with seasonal menus.', address: '321 Elm St, Los Angeles, CA 90210', coordinates: [34.0522, -118.2437] },
-  { id: 'b5', image: 'https://picsum.photos/seed/biz5/640/360', title: 'Bright Minds', description: 'Learning center offering after-school programs.', address: '654 Maple Dr, Austin, TX 78701', coordinates: [30.2672, -97.7431] },
-  { id: 'b6', image: 'https://picsum.photos/seed/biz6/640/360', title: 'Studio North', description: 'Creative agency for brand and web design.', address: '987 Cedar Ln, Denver, CO 80202', coordinates: [39.7392, -104.9903] },
+const businessRecommendations: BusinessRecommendation[] = [
+  {
+    id: 'grace-ling',
+    name: 'Grace Ling',
+    address: '240 West 40th Street, Suite 603, New York, NY 10018, US',
+    phone_number: null,
+    email: 'shop@gracelingofficial.com',
+    website: 'https://gracelingofficial.com/',
+    review_rate: 'N/A',
+    number_of_reviews: 'N/A',
+    description: 'Grace Ling is a fashion designer and her eponymous label, based in New York City. She was born in Singapore and studied Fashion Design at Parsons School of Design in New York City and Central Saint Martins in London. Her brand, launched in 2020, is known for its sensual yet highly technical pieces, often featuring 3D-printed metal designs and sculptural silhouettes.',
+    coordinates: [40.7589, -73.9851] // NYC coordinates
+  },
+  {
+    id: 'paolina-russo',
+    name: 'Paolina Russo',
+    address: null,
+    phone_number: null,
+    email: 'sales@paolinarusso.com, press@paolinarusso.com',
+    website: 'paolinarusso.com',
+    review_rate: 'N/A',
+    number_of_reviews: 'N/A',
+    description: 'Paolina Russo is a London-based fashion brand co-founded by Canadian designer Paolina Russo and French designer Lucile Guilmard, established in 2020. The brand is known for its avant-garde textile development, craftsmanship, and futuristic aesthetic.',
+    coordinates: [51.5074, -0.1278] // London coordinates
+  },
+  {
+    id: 'cuts-clothing',
+    name: 'Cuts Clothing, Inc.',
+    address: '5839 Green Valley Cir #208, Culver City, CA 90230-6937, US',
+    phone_number: null,
+    email: null,
+    website: 'https://www.cutsclothing.com/',
+    review_rate: '3.7',
+    number_of_reviews: '3',
+    description: 'Cuts Clothing creates premium essentials, including tees, tanks, polos, pants, button-downs, and Henleys. The brand focuses on quality fabric, fit, and durability for "the sport of business" and is described as an online retailer.',
+    coordinates: [34.0219, -118.3965] // Culver City coordinates
+  },
+  {
+    id: 'original-grain',
+    name: 'Original Grain',
+    address: '4833 Santa Monica Avenue, Suite 7309, San Diego, CA 92167, US',
+    phone_number: '(619) 501-6554',
+    email: 'support@originalgrain.com',
+    website: 'https://www.originalgrain.com/',
+    review_rate: '5-star',
+    number_of_reviews: 'Over 18,000',
+    description: 'Original Grain is a San Diego-based company, established in 2013, that designs and manufactures handcrafted watches and accessories. They are known for blending sustainable and natural materials like reclaimed wood with stainless steel to create unique timepieces.',
+    coordinates: [32.7157, -117.1611] // San Diego coordinates
+  },
+  {
+    id: 'obvi',
+    name: 'Obvi',
+    address: '78 John Miller Way, Kearny, New Jersey 07032, US',
+    phone_number: '1-888-910-8338',
+    email: 'hello@myobvi.com',
+    website: 'https://www.myobvi.com',
+    review_rate: 'N/A',
+    number_of_reviews: 'N/A',
+    description: 'Obvi is a company located in Kearny, New Jersey, that produces health and wellness supplements, primarily focusing on collagen and protein products. They aim to provide transparent products with real results without sacrificing taste.',
+    coordinates: [40.7684, -74.1454] // Kearny, NJ coordinates
+  }
 ]
 
 const selectedIds = ref<Set<string>>(new Set())
@@ -51,14 +109,14 @@ function toggleSelected(id: string) {
 }
 
 const isMultiselect = ref(false)
-const activeItem = ref<GalleryItem | null>(null)
+const activeItem = ref<BusinessRecommendation | null>(null)
 const isDialogOpen = ref(false)
 
 const isSettingsOpen = ref(false)
 const userRole = ref('')
 const userObjective = ref('')
 
-function handleCardClick(item: GalleryItem) {
+function handleCardClick(item: BusinessRecommendation) {
   if (isMultiselect.value) {
     toggleSelected(item.id)
     return
@@ -124,13 +182,19 @@ function sendMessage() {
 }
 
 function massAdd() {
-  const selectedItems = galleryItems.filter(item => selectedIds.value.has(item.id))
+  const selectedItems = businessRecommendations.filter(item => selectedIds.value.has(item.id))
   selectedItems.forEach(item => {
     addLead({
       id: item.id,
-      name: item.title,
+      name: item.name,
       stage: 1,
       address: item.address,
+      phone_number: item.phone_number,
+      email: item.email,
+      website: item.website,
+      review_rate: item.review_rate,
+      number_of_reviews: item.number_of_reviews,
+      description: item.description,
       coordinates: item.coordinates
     })
   })
@@ -141,15 +205,21 @@ function massAdd() {
 }
 
 function massEmail() {
-  const selectedItems = galleryItems.filter(item => selectedIds.value.has(item.id))
+  const selectedItems = businessRecommendations.filter(item => selectedIds.value.has(item.id))
   selectedItems.forEach(item => {
     addLead({
       id: item.id,
-      name: item.title,
+      name: item.name,
       stage: 2,
       outreachMethod: 'email',
       emailTranscript: 'Email transcript goes here',
       address: item.address,
+      phone_number: item.phone_number,
+      email: item.email,
+      website: item.website,
+      review_rate: item.review_rate,
+      number_of_reviews: item.number_of_reviews,
+      description: item.description,
       coordinates: item.coordinates
     })
   })
@@ -160,15 +230,21 @@ function massEmail() {
 }
 
 function massCall() {
-  const selectedItems = galleryItems.filter(item => selectedIds.value.has(item.id))
+  const selectedItems = businessRecommendations.filter(item => selectedIds.value.has(item.id))
   selectedItems.forEach(item => {
     addLead({
       id: item.id,
-      name: item.title,
+      name: item.name,
       stage: 2,
       outreachMethod: 'call',
       callTranscript: 'Call transcript and summary go here',
       address: item.address,
+      phone_number: item.phone_number,
+      email: item.email,
+      website: item.website,
+      review_rate: item.review_rate,
+      number_of_reviews: item.number_of_reviews,
+      description: item.description,
       coordinates: item.coordinates
     })
   })
@@ -225,21 +301,33 @@ function massCall() {
                   </div>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <div v-for="item in galleryItems" :key="item.id"
+                  <div v-for="item in businessRecommendations" :key="item.id"
                     class="group cursor-pointer overflow-hidden rounded-lg border bg-background transition hover:shadow-sm"
                     :class="selectedIds.has(item.id) ? 'ring-2 ring-primary' : ''" @click="handleCardClick(item)">
-                    <div class="aspect-video w-full overflow-hidden bg-muted">
-                      <img :src="item.image" alt=""
-                        class="h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]" />
-                    </div>
-                    <div class="p-3 space-y-1">
+                    <div class="p-4 space-y-3">
                       <div class="flex items-start justify-between gap-2">
-                        <h3 class="text-sm font-medium leading-none">{{ item.title }}</h3>
+                        <h3 class="text-sm font-medium leading-none">{{ item.name }}</h3>
                         <div class="shrink-0 h-2.5 w-2.5 rounded-full border"
                           :class="selectedIds.has(item.id) ? 'bg-primary border-primary' : 'bg-background border-muted-foreground/30'"
                           aria-hidden="true" />
                       </div>
-                      <p class="text-xs text-muted-foreground">{{ item.description }}</p>
+                      <p class="text-xs text-muted-foreground line-clamp-3">{{ item.description }}</p>
+                      <div class="space-y-1">
+                        <div v-if="item.address" class="flex items-center gap-1 text-xs text-muted-foreground">
+                          <span>📍</span>
+                          <span class="truncate">{{ item.address }}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                          <span v-if="item.phone_number" class="text-sm" title="Phone available">📞</span>
+                          <span v-if="item.email" class="text-sm" title="Email available">📧</span>
+                          <span v-if="item.website" class="text-sm" title="Website available">🌐</span>
+                        </div>
+                        <div v-if="item.review_rate || item.number_of_reviews"
+                          class="flex items-center gap-1 text-xs text-muted-foreground">
+                          <span>⭐</span>
+                          <span>{{ item.review_rate ?? 'N/A' }} ({{ item.number_of_reviews ?? 'No' }} reviews)</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -272,47 +360,66 @@ function massCall() {
     <Dialog v-model:open="isDialogOpen">
       <DialogContent class="sm:max-w-[560px]">
         <DialogHeader>
-          <DialogTitle>{{ activeItem?.title }}</DialogTitle>
+          <DialogTitle>{{ activeItem?.name }}</DialogTitle>
           <DialogDescription>
-            {{ activeItem?.description }}
+            Business details and contact information
           </DialogDescription>
         </DialogHeader>
         <div class="mt-2 space-y-4">
-          <div class="aspect-video w-full overflow-hidden rounded-md bg-muted">
-            <img v-if="activeItem" :src="activeItem.image" alt="" class="h-full w-full object-cover" />
-          </div>
-          <div class="grid grid-cols-2 gap-4 text-sm">
-            <div>
-              <div class="text-muted-foreground">Category</div>
-              <div>Cafe / Retail</div>
+          <div class="space-y-3">
+            <div v-if="activeItem?.description" class="text-sm text-muted-foreground">
+              {{ activeItem.description }}
             </div>
-            <div>
-              <div class="text-muted-foreground">Location</div>
-              <div>Downtown</div>
-            </div>
-            <div>
-              <div class="text-muted-foreground">Website</div>
-              <div><a class="underline" href="#" @click.prevent>example.com</a></div>
-            </div>
-            <div>
-              <div class="text-muted-foreground">Status</div>
-              <div>Active lead</div>
-            </div>
-            <div class="col-span-2">
-              <div class="text-muted-foreground">Address</div>
-              <div>{{ activeItem?.address }}</div>
+            <div class="grid grid-cols-1 gap-3 text-sm">
+              <div v-if="activeItem?.address">
+                <div class="text-muted-foreground">Address</div>
+                <div class="flex items-center gap-1">
+                  <span>📍</span>
+                  <span>{{ activeItem.address }}</span>
+                </div>
+              </div>
+              <div v-if="activeItem?.phone_number">
+                <div class="text-muted-foreground">Phone</div>
+                <div class="flex items-center gap-1">
+                  <span>📞</span>
+                  <span>{{ activeItem.phone_number }}</span>
+                </div>
+              </div>
+              <div v-if="activeItem?.email">
+                <div class="text-muted-foreground">Email</div>
+                <div class="flex items-center gap-1">
+                  <span>📧</span>
+                  <span>{{ activeItem.email }}</span>
+                </div>
+              </div>
+              <div v-if="activeItem?.website">
+                <div class="text-muted-foreground">Website</div>
+                <div class="flex items-center gap-1">
+                  <span>🌐</span>
+                  <a :href="activeItem.website" target="_blank" class="underline hover:text-primary">{{
+                    activeItem.website }}</a>
+                </div>
+              </div>
+              <div v-if="activeItem?.review_rate && activeItem?.number_of_reviews">
+                <div class="text-muted-foreground">Reviews</div>
+                <div class="flex items-center gap-1">
+                  <span>⭐</span>
+                  <span>{{ activeItem.review_rate ?? 'N/A' }} ({{ activeItem.number_of_reviews ?? 'No' }}
+                    reviews)</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
         <DialogFooter class="mt-2 gap-2 sm:gap-0 flex space-x-2">
           <Button variant="outline" @click="isDialogOpen = false">Close</Button>
           <Button
-            @click="() => { if (activeItem) { addLead({ id: activeItem.id, name: activeItem.title, stage: 1, address: activeItem.address, coordinates: activeItem.coordinates }); } isDialogOpen = false; toast('Added to leads', { description: `${activeItem?.title} added at Discovery` }) }">Add</Button>
+            @click="() => { if (activeItem) { addLead({ id: activeItem.id, name: activeItem.name, stage: 1, address: activeItem.address, phone_number: activeItem.phone_number, email: activeItem.email, website: activeItem.website, review_rate: activeItem.review_rate, number_of_reviews: activeItem.number_of_reviews, description: activeItem.description, coordinates: activeItem.coordinates }); } isDialogOpen = false; toast('Added to leads', { description: `${activeItem?.name} added at Discovery` }) }">Add</Button>
           <Button
-            @click="() => { if (activeItem) { addLead({ id: activeItem.id, name: activeItem.title, stage: 2, outreachMethod: 'email', emailTranscript: 'Email transcript goes here', address: activeItem.address, coordinates: activeItem.coordinates }); } isDialogOpen = false; toast('Email agent started', { description: `To: ${activeItem?.title}` }) }">E-Mail
+            @click="() => { if (activeItem) { addLead({ id: activeItem.id, name: activeItem.name, stage: 2, outreachMethod: 'email', emailTranscript: 'Email transcript goes here', address: activeItem.address, phone_number: activeItem.phone_number, email: activeItem.email, website: activeItem.website, review_rate: activeItem.review_rate, number_of_reviews: activeItem.number_of_reviews, description: activeItem.description, coordinates: activeItem.coordinates }); } isDialogOpen = false; toast('Email agent started', { description: `To: ${activeItem?.name}` }) }">E-Mail
             using Agent</Button>
           <Button
-            @click="() => { if (activeItem) { addLead({ id: activeItem.id, name: activeItem.title, stage: 2, outreachMethod: 'call', callTranscript: 'Call transcript and summary go here', address: activeItem.address, coordinates: activeItem.coordinates }); } isDialogOpen = false; toast('Call agent started', { description: `Calling: ${activeItem?.title}` }) }">Call
+            @click="() => { if (activeItem) { addLead({ id: activeItem.id, name: activeItem.name, stage: 2, outreachMethod: 'call', callTranscript: 'Call transcript and summary go here', address: activeItem.address, phone_number: activeItem.phone_number, email: activeItem.email, website: activeItem.website, review_rate: activeItem.review_rate, number_of_reviews: activeItem.number_of_reviews, description: activeItem.description, coordinates: activeItem.coordinates }); } isDialogOpen = false; toast('Call agent started', { description: `Calling: ${activeItem?.name}` }) }">Call
             using Agent</Button>
         </DialogFooter>
       </DialogContent>

@@ -105,13 +105,48 @@ function updateMarkers() {
     leadsWithCoordinates.value.forEach(lead => {
         const [lat, lng] = lead.coordinates!
 
-        // Create info window content
+        // Create info window content with enhanced styling
+        const stage = lead.stage || 1
+        const statusText = stage === 1
+            ? '📋 To Review'
+            : stage === 2
+                ? (lead.outreachMethod === 'email' ? '📧 Email Outreach' : '📞 Call Outreach')
+                : '⚙️ Processing'
+
+        const statusColor = stage === 1
+            ? 'bg-yellow-100 text-yellow-800'
+            : stage === 2
+                ? 'bg-primary/10 text-primary'
+                : 'bg-blue-100 text-blue-800'
+
         const infoContent = `
-            <div class="p-2">
-                <h3 class="font-semibold text-gray-900">${lead.name}</h3>
-                <p class="text-sm text-gray-600">Stage ${lead.stage || 1}</p>
-                ${lead.address ? `<p class="text-sm text-gray-500">${lead.address}</p>` : ''}
-                ${lead.outreachMethod ? `<p class="text-sm text-blue-600">${lead.outreachMethod === 'email' ? '📧 Email' : '📞 Call'}</p>` : ''}
+            <div class="p-4 min-w-[200px] max-w-[280px]">
+                <div class="space-y-3">
+                    <div>
+                        <h3 class="font-semibold text-gray-900 text-lg leading-tight">${lead.name}</h3>
+                        <div class="mt-1">
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${statusColor}">
+                                ${statusText}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    ${lead.address ? `
+                        <div class="flex items-start space-x-2">
+                            <span class="text-gray-400 mt-0.5">📍</span>
+                            <p class="text-sm text-gray-600 leading-relaxed">${lead.address}</p>
+                        </div>
+                    ` : ''}
+                    
+                    <div class="pt-2 border-t border-gray-200">
+                        <button 
+                            onclick="window.open('/leads/${lead.slug}', '_blank')"
+                            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 h-9 py-2 has-[>svg]:px-3 px-4"
+                        >
+                            View Details
+                        </button>
+                    </div>
+                </div>
             </div>
         `
 
@@ -189,17 +224,6 @@ watch(leadsWithCoordinates, () => {
 }, { deep: true })
 
 onMounted(() => {
-    // Add a test lead for debugging
-    if (leads.length === 0) {
-        console.log('Adding test lead for debugging')
-        addLead({
-            id: 'test-lead',
-            name: 'Test Business',
-            coordinates: [40.7128, -74.0060], // NYC coordinates
-            address: 'New York, NY'
-        })
-    }
-
     // Add a small delay to ensure DOM is ready
     setTimeout(() => {
         console.log('Map container dimensions:', {

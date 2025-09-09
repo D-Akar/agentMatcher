@@ -1,0 +1,14 @@
+{
+    "app_name": "contextual_agent",
+    "user_id": "tester1",
+    "session_id": "session1",
+    "new_message": {
+        "role": "user",
+        "parts": [
+            {
+                "text": "My primary service is building and optimizing high-end Shopify e-commerce websites. My unique value proposition is that I create a premium, luxury user experience that is proven to increase conversion rates for exclusive brands. The specific problems I solve for my clients include having a slow, clunky website that frustrates users, a confusing checkout process that leads to high cart abandonment, and a generic site design that fails to communicate their premium brand identity. The key benefits and outcomes my clients see are a much faster and more beautiful website, a measurable increase in online sales, typically around 15-20%, and a stronger, more professional brand image. What really makes my service different from competitors is that I provide a fully bespoke design tailored to each client, unlike agencies that use templates. Plus, I include 3 months of post-launch performance monitoring and optimization, which is something most freelancers don't offer. My target is the direct-to-consumer (DTC) industry, specifically focusing on niches like independent fashion labels and high-end consumer goods. I'm looking for small- to medium-sized companies, usually with a team of about 5 to 30 employees. Geographically, my focus is on North America, including the USA and Canada. The best person for me to talk to is usually the Founder, CEO, or the Head of E-commerce. For opportunity signals, some great green flags for me are seeing a brand get a feature in a major publication like Vogue, noticing they are hiring for a new marketing position, or finding that their current website has a very low score on Google PageSpeed Insights. On the other hand, some definite red flags are brands that sell most of their products on Amazon, companies that have had recent public layoffs, or any business that has been operating for less than a year!"
+            }
+        ]
+    },
+    "streaming": false
+}

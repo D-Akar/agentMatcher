@@ -52,12 +52,6 @@ const data = {
   ],
   navMain: [
     {
-      title: "Prompting",
-      url: "/prompting",
-      icon: SquareTerminal,
-      isActive: true,
-    },
-    {
       title: "Leads Overview",
       url: "/leads-overview",
       icon: Map,

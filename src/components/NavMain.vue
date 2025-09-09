@@ -19,6 +19,13 @@ import {
           </RouterLink>
         </SidebarMenuButton>
       </SidebarMenuItem>
+      <SidebarMenuItem>
+        <SidebarMenuButton as-child :tooltip="'Chat Overview'">
+          <RouterLink to="/chat">
+            <span>Chat Overview</span>
+          </RouterLink>
+        </SidebarMenuButton>
+      </SidebarMenuItem>
     </SidebarMenu>
   </SidebarGroup>
 </template>
