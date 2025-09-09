@@ -189,7 +189,7 @@ function startCallOutreach() {
                             </Button>
                         </div>
                         <div v-else class="text-muted-foreground">
-                            Lead is already in {{steps.find(s => s.id === lead.stage)?.title}} stage
+                            Lead is already in {{steps.find(s => s.id === lead?.stage)?.title}} stage
                         </div>
                     </div>
                 </div>
